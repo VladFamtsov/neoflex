@@ -56,14 +56,14 @@ declare rep_date date := i_OnDate;
 			             + coalesce (datf.credit_amount_rub, 0)
 			    end as bal_out_rub
 		   from ds.md_account_d mad
-		   left join dm_account_balance_f dabf 
+		   left join dm.dm_account_balance_f dabf --Таблица для определения входящего остатка
 		     on dabf.account_rk = mad.account_rk
 			and dabf.on_date = rep_date - 1
-	       left join dm_account_turnover_f datf 
+	       left join dm.dm_account_turnover_f datf --Таблица для определения оборотов за отчётную дату и расчета исходящего остатка
 	         on datf.account_rk = mad.account_rk
 	        and datf.on_date = rep_date
 		  where rep_date between mad.data_actual_date 
-		             and mad.data_actual_end_date;
+		                     and mad.data_actual_end_date;
 	 finish_log := now();
 	insert into logs.load ( --Логгирование.
 		   id,
@@ -87,7 +87,7 @@ end; $$ language plpgsql
 
 --Для проверки данных в таблице.
 select *
-  from dm_account_balance_f
+  from dm.dm_account_balance_f
 
   
 --Функция для заполнения данных за каждый день с помощью цикла.
@@ -106,6 +106,5 @@ select * from logs.load
 
 --Вызов функции за дату.
 select ds.fill_account_balance_f('2018-01-11')
-
 
 
