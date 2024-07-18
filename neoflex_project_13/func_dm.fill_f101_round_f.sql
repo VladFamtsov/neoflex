@@ -51,8 +51,8 @@ insert into dm.dm_f101_round_f(
 			 and mad.currency_code not in (643, 810)
 			 and mad.data_actual_date <= rep_end_date
 			 and mad.data_actual_end_date >= rep_start_date  
-			join dm.dm_account_balance_f dabf on
-				 dabf.account_rk = mad.account_rk
+			join dm.dm_account_balance_f dabf 
+			  on dabf.account_rk = mad.account_rk
 --			 and dabf.account_rk = 13631
 --		     and dabf.account_rk in (14878,298332839)
 		     and dabf.on_date = i_OnDate - interval '1 month' - interval '1 day'
@@ -113,7 +113,8 @@ insert into dm.dm_f101_round_f(
 			 and mad.data_actual_end_date >= rep_start_date 
 --			 and mad.account_rk = 13631
 --			 and mad.account_rk in (14878,298332839)
-			join DM.dm_account_turnover_f datf on datf.account_rk = mad.account_rk 
+			join DM.dm_account_turnover_f datf 
+			  on datf.account_rk = mad.account_rk 
 			 and datf.on_date between rep_start_date and rep_end_date 
 		   group by 	
 --				 mad.account_rk,
@@ -126,13 +127,14 @@ insert into dm.dm_f101_round_f(
 				 sum(datf.debet_amount_rub) as turn_deb_total,
 				 sum(datf.credit_amount_rub) as turn_cre_total
 			from ds.MD_LEDGER_ACCOUNT_S mla
-			join ds.md_account_d mad on
-				 cast(substring(mad.account_number, 1, 5) as int) = mla.ledger_account
-				 and mad.data_actual_date <= rep_end_date
-				 and mad.data_actual_end_date >= rep_start_date 
+			join ds.md_account_d mad 
+			  on cast(substring(mad.account_number, 1, 5) as int) = mla.ledger_account
+		     and mad.data_actual_date <= rep_end_date
+			 and mad.data_actual_end_date >= rep_start_date 
 --				 and mad.account_rk = 13631
 --				 and mad.account_rk in (14878,298332839)
-			join DM.dm_account_turnover_f datf on datf.account_rk = mad.account_rk 
+			join DM.dm_account_turnover_f datf 
+			  on datf.account_rk = mad.account_rk 
 			 and datf.on_date between rep_start_date and rep_end_date 
 		   group by 	
 --				 mad.account_rk,
@@ -149,11 +151,11 @@ insert into dm.dm_f101_round_f(
 			  and mad.currency_code in (643, 810)
 			  and mad.data_actual_date <= rep_end_date
 			  and mad.data_actual_end_date >= rep_start_date 
-			 join dm.dm_account_balance_f dabf on
-				  dabf.account_rk = mad.account_rk
+			 join dm.dm_account_balance_f dabf 
+			   on dabf.account_rk = mad.account_rk
 --				  and dabf.account_rk = 13631
 --				  and dabf.account_rk in (14878,298332839)
-				  and dabf.on_date = rep_end_date
+			  and dabf.on_date = rep_end_date
 			group by mla.ledger_account
 -- СТЕ исходящих остатков в валюте
 			), rest_out_val as (
